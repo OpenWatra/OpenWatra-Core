@@ -1,0 +1,47 @@
+﻿@model Watra.Client.Web.ViewModel.CalculatorViewModel
+
+@if (!(Model.ErrorMessageAvailable || Model.WarningMessageAvailable) && Model.SelectedWatraId > 0)
+{
+    <div class="alert alert-success">
+        Der Wassertransport wurde erfolgreich berechnet.
+    </div>
+}
+
+@if (Model.ErrorMessageAvailable)
+{
+    <div class="alert alert-danger">
+        <strong>Fehler:</strong>
+        <ul>
+            @foreach (var message in Model.ErrorMessages)
+            {
+                <li>@message</li>
+            }
+        </ul>
+    </div>
+}
+
+@if (Model.WarningMessageAvailable)
+{
+    <div class="alert alert-warning">
+        <strong>Warnung:</strong>
+        <ul>
+            @foreach (var message in Model.WarningMessages)
+            {
+                <li>@message</li>
+            }
+        </ul>
+    </div>
+}
+
+@if (Model.InfoMessageAvailable)
+{
+    <div class="alert alert-info">
+        <strong>Info:</strong>
+        <ul>
+            @foreach (var message in Model.InfoMessages)
+            {
+                <li>@message</li>
+            }
+        </ul>
+    </div>
+}

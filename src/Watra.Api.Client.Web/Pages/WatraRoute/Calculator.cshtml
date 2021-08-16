@@ -1,0 +1,159 @@
+﻿@page
+@model Watra.Client.Web.ViewModel.CalculatorViewModel
+
+@{
+    ViewData["Title"] = "Watra-Route berechnen";
+}
+
+<h1>Watra-Route berechnen</h1>
+
+<hr />
+@if (Model.SelectedWatraId < 1)
+{
+    @await Html.PartialAsync("_CalculatorError.cshtml", Model)
+<form asp-action="CalcWatraRouteView">
+    <h2>Aktive Watra-Rotuen in der Datenbank</h2>
+
+    <table class="table table-striped">
+        <tr>
+            <th>Berechnen</th>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Beschreibung</th>
+            <th>Aktiv</th>
+            <th>Bearbeiten</th>
+        </tr>
+        @if (Model.DisplayWatraRoutes != null)
+            {
+        @for (var i = 0; i < Model.DisplayWatraRoutes.Count(); i++)
+                {
+        <tr>
+            <td>@Html.RadioButtonFor(Model => Model.SelectedWatraId, @Model.DisplayWatraRoutes[i].Id)</td>
+            <td>@Model.DisplayWatraRoutes[i].Id</td>
+            <td>@Model.DisplayWatraRoutes[i].Name</td>
+            <td>@Model.DisplayWatraRoutes[i].Description</td>
+            <td>@Model.DisplayWatraRoutes[i].IsActiveWatra</td>
+            <td><a href="Edit?id=@Model.DisplayWatraRoutes[i].Id">Edit</a>/<a href="Delete?id=@Model.DisplayWatraRoutes[i].Id">Delete</a></td>
+        </tr>
+                }
+            }
+    </table>
+    @if(!Model.NoFilter)
+    {
+        <a href="Calculator?noFilter=true">zeige deaktiverte Wassertransporte</a>
+        <br /><br />
+    }
+
+    <div class="form-group">
+        <input type="submit" value="Berechnung starten" class="btn btn-primary" />
+    </div>
+</form>
+}
+else if (Model.WatraCalculation == null)
+{
+    @await Html.PartialAsync("_CalculatorError.cshtml", Model)
+}
+else if (Model.WatraCalculation.WatraCalculationSection == null)
+{
+    @await Html.PartialAsync("_CalculatorError.cshtml", Model)
+}
+else
+{
+    @await Html.PartialAsync("_CalculatorError.cshtml", Model)
+
+    <form asp-action="CalcWatraRouteView">
+        <h2>@Model.WatraCalculation.Name</h2>
+        <input type="hidden" value="@Model.SelectedWatraId" asp-for="@Model.SelectedWatraId" />
+        <table class="table calculationtable table-striped">
+            <tr>
+                <th>
+                    Beschreibung
+                </th>
+                <td>@Model.WatraCalculation.Description</td>
+            </tr>
+            <tr>
+                <th>Sicherheitsdruck</th>
+                <td>@Model.WatraCalculation.SafetyPressure bar</td>
+            </tr>
+            <tr>
+                <th><a href="#" data-toggle="tooltip" data-placement="right" title="evt. begrenzt eine Pumpe die maximale Flussrate.">Tatsächliche Flussrate</a></th>
+                <td>@Model.WatraCalculation.ActualFlowRate l/min</td>
+            </tr>
+            <tr>
+                <th>Verbleibende Distanz zum Ziel</th>
+                <td>@Model.WatraCalculation.RemainingDistance m</td>
+            </tr>
+        </table>
+
+        <h3>Sektionen</h3>
+        <div class="form-group">
+            <select asp-for="@Model.SelectedSection" onchange="this.form.submit()">
+                @for (int i = 0; i < Model.WatraCalculation.WatraCalculationSection.Count(); i++)
+                {
+                    <option value="@i">Sektion @i: @Model.WatraCalculation.WatraCalculationSection[i].NameOfPump </option>
+                }
+            </select>
+            <noscript>
+                <input type="submit" value="Ausgewählte Sektion anzeigen" class="btn btn-link" />
+            </noscript>
+        </div>
+        @if (Model.SelectedSection >= 0 && Model.SelectedSection < Model.WatraCalculation.WatraCalculationSection.Count())
+        {
+            <table class="table calculationtable table-striped">
+                <tr>
+                    <th>Länge des Sektion</th>
+                    <td>@Model.WatraCalculation.WatraCalculationSection[Model.SelectedSection].SectionLength m</td>
+                </tr>
+                <tr>
+                    <th>Höhendifferenz Start-End-Punkt</th>
+                    <td>@Model.WatraCalculation.WatraCalculationSection[Model.SelectedSection].HeightDifference m (Peak: @Model.WatraCalculation.WatraCalculationSection[Model.SelectedSection].HeightPeak m)</td>
+                </tr>
+                <tr>
+                    <th>Druck nach Pumpe</th>
+                    <td>@Model.WatraCalculation.WatraCalculationSection[Model.SelectedSection].PressureAtSectionStart bar</td>
+                </tr>
+                <tr>
+                    <th>Druckverlust durch Höhe</th>
+                    <td>@Model.WatraCalculation.WatraCalculationSection[Model.SelectedSection].PressureLossHeight bar</td>
+                </tr>
+                <tr>
+                    <th>Druckverlust durch Reibung</th>
+                    <td>@Model.WatraCalculation.WatraCalculationSection[Model.SelectedSection].PressureLossFriction bar</td>
+                </tr>
+                <tr>
+                    <th><a href="#" data-toggle="tooltip" data-placement="right" title="Druck setzt sich zusammen aus ausgewähltem Druck am Ende des Wassertransports und Sicherheitsdruck (ist in Wirklichkeit evt. nicht vorhanden!)">Druck am Sektionsende</a></th>
+                    <td>@Model.WatraCalculation.WatraCalculationSection[Model.SelectedSection].PressureAtSectionEnd bar</td>
+                </tr>
+                <tr>
+                    <th>Pumpenname</th>
+                    <td>@Model.WatraCalculation.WatraCalculationSection[Model.SelectedSection].NameOfPump</td>
+                </tr>
+                <tr>
+                    <th>Schlauchschloss Bezeichnung</th>
+                    <td>@Model.WatraCalculation.WatraCalculationSection[Model.SelectedSection].NameOfConnector</td>
+                </tr>
+                <tr>
+                    <th>Schlauchschlossdruchmesser</th>
+                    <td>@Model.WatraCalculation.WatraCalculationSection[Model.SelectedSection].DiameterConnector mm</td>
+                </tr>
+                <tr>
+                    <th>Anzahl parallele Schlauchleitungen</th>
+                    <td>@Model.WatraCalculation.WatraCalculationSection[Model.SelectedSection].NumberOfHoseLines</td>
+                </tr>
+                <tr>
+                    <th>Total benötigte Schläuche</th>
+                    <td>@Model.WatraCalculation.WatraCalculationSection[Model.SelectedSection].TotalHosesUsed</td>
+                </tr>
+                <tr>
+                    <th>Zusätzliche Schläuche</th>
+                    <td>@Model.WatraCalculation.WatraCalculationSection[Model.SelectedSection].ExternalHosesNeeded</td>
+                </tr>
+            </table>
+        }
+    </form>
+    <div>
+        <a href="Calculator">Abbrechen</a>
+    </div>
+}
+
+
