@@ -1,0 +1,34 @@
+﻿<Window x:Class="Watra.Client.Desktop.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Watra.Client.Desktop" xmlns:viewModel="clr-namespace:Watra.Client.Desktop.ViewModel"
+        mc:Ignorable="d"
+        Title="WaTra Desktop Client" MinHeight="450" MinWidth="800">
+    <Window.DataContext>
+        <viewModel:MainViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"></RowDefinition>
+            <RowDefinition Height="3*"></RowDefinition>
+            <RowDefinition Height="3*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="5*"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="5*"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="5*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="5" FontWeight="Bold" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Center">WaTra Desktop Stammdatenapplikation</Label>
+
+        <Button Grid.Row="1" Grid.Column="1" Command="{Binding EditHoseConnectorsCommand}">Schlauchanschlüsse</Button>
+        <Button Grid.Row="1" Grid.Column="3" Command="{Binding EditHosesCommand}">Schläuche</Button>
+        <Button Grid.Row="1" Grid.Column="5" Command="{Binding EditPumpsCommand}">Pumpen</Button>
+    </Grid>
+</Window>

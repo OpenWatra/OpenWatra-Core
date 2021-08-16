@@ -1,0 +1,78 @@
+﻿@page
+@model Watra.Client.Web.ViewModel.WatraRouteCreateViewModel
+
+@{
+    ViewData["Title"] = "Watra-Route erstellen";
+}
+
+<h1>Watra-Route erstellen</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateWatraRouteView">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Name</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">Beschreibung</label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FlowRate" class="control-label">Flussrate</label>
+                <input asp-for="FlowRate" class="form-control" />
+                <span asp-validation-for="FlowRate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MinimalOutletPressure" class="control-label">Minimaler Abgangsdruck</label>
+                <input asp-for="MinimalOutletPressure" class="form-control" />
+                <span asp-validation-for="MinimalOutletPressure" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SafetyPressure" class="control-label">Sicherheitsdruck für Berechnung (mind. 2 bar empfohlen)</label>
+                <input asp-for="SafetyPressure" class="form-control" />
+                <span asp-validation-for="SafetyPressure" class="text-danger"></span>
+            </div>
+
+            <h2>Pumpen </h2>
+
+            <table class="table table-striped">
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Verwenden?</th>
+                </tr>
+
+                @for (var i = 0; i < Model.PumpSelections.Count(); i++)
+                {
+                    <tr>
+                        <td>
+                            <input type="hidden" asp-for="PumpSelections[i].IdPump" />
+                            @Model.PumpSelections[i].IdPump
+                        </td>
+                        <td>@Model.PumpSelections[i].Name</td>
+                        <td><input asp-for="PumpSelections[i].IsSelected" /></td>
+                    </tr>
+                }
+            </table>
+
+            
+
+            <div class="form-group">
+                <input type="submit" value="Speichern" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Abbrechen</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

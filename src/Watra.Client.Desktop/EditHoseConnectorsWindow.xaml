@@ -1,0 +1,80 @@
+﻿<Window x:Class="Watra.Client.Desktop.EditHoseConnectorsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Watra.Client.Desktop"
+        mc:Ignorable="d"
+        Title="Schlauchanschlüsse bearbeiten" Height="450" Width="800" Loaded="Window_Loaded">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <ListBox ItemsSource="{Binding ModelList}" SelectedItem="{Binding SelectedItem}">
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="{Binding Path=Name}" />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Grid Grid.Column="1" IsEnabled="{Binding EditGridIsEnabled}">
+        <Grid Grid.Column="1" Grid.RowSpan="4" DataContext="{Binding SelectedItem}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Content="Name"></Label>
+            <Label Grid.Row="1" Content="Unique ID"></Label>
+            <Label Grid.Row="2" Content="Durchmesser"></Label>
+            <Label Grid.Row="3" Content="ID"></Label>
+
+            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name}"></TextBox>
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding UniqueId}" IsReadOnly="True"></TextBox>
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Diameter}"></TextBox>
+            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Id}" IsReadOnly="True"></TextBox>
+
+            </Grid>
+        </Grid>
+
+        <Button Grid.Row="1" Command="{Binding CreateNewCommand}">
+            Neuer Eintrag
+        </Button>
+        <Button Grid.Row="2" Command="{Binding DeleteCommand}">
+            Löschen
+        </Button>
+        <Button Grid.Row="3" Command="{Binding UpdateCommand}">
+            Speichern
+        </Button>
+
+        <StatusBar Grid.Row="4" Grid.ColumnSpan="2" Height="Auto">
+            <Label Content="{Binding Status}"></Label>
+        </StatusBar>
+        
+    </Grid>
+</Window>
