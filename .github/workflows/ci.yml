@@ -8,6 +8,7 @@ on:
   push:
     branches: [ main ]
   pull_request:
+    branches:
       - main
       - 'feature/**'
 
@@ -19,7 +20,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest, ubuntu-latest, macOS-latest]
+        os: [windows-latest]
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
